@@ -4,6 +4,14 @@ const jwt = require('jsonwebtoken');
 
 exports.registerUser = (req, res) => {
     const { name, email, password } = req.body;
+
+    // Debugging untuk melihat apakah password benar-benar ada
+    console.log("Password received:", password);
+
+    if (!password) {
+        return res.status(400).json({ message: "Password is required" });
+    }
+
     const hashedPassword = bcrypt.hashSync(password, 10);
     
     db.query('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', 
@@ -14,6 +22,7 @@ exports.registerUser = (req, res) => {
         }
     );
 };
+
 
 exports.loginUser = (req, res) => {
     const { email, password } = req.body;
